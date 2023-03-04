@@ -12,12 +12,15 @@ router.get("/signup", (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = User.matchPassword(email, password);
-
-  console.log("User", user);
-  return res.redirect("/");
+  try {
+    const { email, password } = req.body;
+    const token = await User.matchPasswordAndGenrateToken(email, password);
+    return res.cookie("token", token).redirect("/");
+  } catch (err) {
+    return res.redirect("signin", {
+      err: "Incorect Email or Password",
+    });
+  }
 });
 
 router.post("/signup", async (req, res) => {
