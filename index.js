@@ -5,15 +5,16 @@ const blogRoute = require("./routes/blog");
 const mongoose = require("mongoose");
 const cookiepaser = require("cookie-parser");
 const Blog = require("./models/blog");
+require('dotenv').config();
 const {
   checkForAuthenticationCookie,
 } = require("./middlewares/authentication");
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5050;
 
 mongoose
-  .connect("mongodb://localhost:27017/blogify")
+  .connect(process.env.DB_URI)
   .then((e) => console.log("mongoDB conected"));
 
 app.set("view engine", "ejs");
