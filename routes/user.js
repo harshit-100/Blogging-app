@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../models/user");
+const {userSignin} = require("../controllers/user")
 
 const router = express.Router();
 
@@ -11,17 +12,7 @@ router.get("/signup", (req, res) => {
   return res.render("signup");
 });
 
-router.post("/signin", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const token = await User.matchPasswordAndGenrateToken(email, password);
-    return res.cookie("token", token).redirect("/");
-  } catch (error) {
-    return res.render("signin", {
-      error: "Incorect Email or Password",
-    });
-  }
-});
+router.post("/signin", userSignin);
 
 router.post("/signup", async (req, res) => {
   const { fullName, email, password } = req.body;
